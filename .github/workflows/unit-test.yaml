@@ -1,12 +1,26 @@
 name: unit tests
 
 on: [push]
+# on:
+#   push:
+#     tags:
+#       - "v.*.*.*"
 
 jobs:
   unit-test:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+    - name: Check commit
+      id: check-commit
+      run: |
+          if [[ ${{ github.event.message }} =~ ^version:*+$ ]]; then
+              echo ::set-output name=match::true
+          fi
+    - name: Build
+      if: steps.check-commit.outputs.match == 'true'
+      run: |
+          echo "commit is a match"
     - name: logging
       run: |
         echo "${{toJSON(github.event)}}"
