@@ -14,7 +14,7 @@ jobs:
     - name: Check commit
       id: check-commit
       run: |
-          if [[ ${{ github.event.message }} =~ ^version:*+$ ]]; then
+          if [[ ${{ toJSON(github.event).message }} =~ ^version:*+$ ]]; then
               echo ::set-output name=match::true
           fi
     - name: Build
